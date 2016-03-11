@@ -41,7 +41,7 @@ class GameViewController: UIViewController {
             if (phrase[i] == " ") {
                 correctTextDisplay += "  "
             } else {
-                correctTextDisplay += " _ "
+                correctTextDisplay += "-"
             }
         }
         
@@ -91,7 +91,7 @@ class GameViewController: UIViewController {
                         if (correctLetters.contains(phraseArray[i])) {
                             correctTextDisplay += String(phraseArray[i]).uppercaseString
                         } else {
-                            correctTextDisplay += " _ "
+                            correctTextDisplay += "-"
                             winGame = false
                         }
                     }
@@ -108,7 +108,7 @@ class GameViewController: UIViewController {
                     incorrectLetters.append(guess)
                     incorrectLetters.append(" ")
                 }
-                incorrectTextView.text = "Incorrect Letters: \n" + String(incorrectLetters)
+                incorrectTextView.text = "Incorrect Letters: " + String(incorrectLetters)
                 
                 
                 if ((incorrectLetters.count/2 + 1) < 7) { //Lose Game Over - False
