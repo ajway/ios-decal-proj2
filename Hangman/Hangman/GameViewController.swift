@@ -22,6 +22,7 @@ class GameViewController: UIViewController {
     var correctLetters:[Character] = []
     var incorrectLetters:[Character] = []
     var phraseArray:[Character] = []
+    var masterPhrase = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,7 @@ class GameViewController: UIViewController {
         // Do any additional setup after loading the view.
         let hangmanPhrases = HangmanPhrases()
         let phrase = hangmanPhrases.getRandomPhrase()
+        masterPhrase = phrase
         
         phraseArray = Array(phrase.characters)
         hangmanImage.image = UIImage(named: "hangman1.gif")
@@ -48,8 +50,9 @@ class GameViewController: UIViewController {
         guessButton.enabled = false
         guessTextField.clearsOnBeginEditing = true
         
-        print("*****************************")
+        print("\n*****************************")
         print(phrase)
+        print("*****************************\n")
     }
     @IBAction func checkInput(sender: AnyObject) {
         validInput = true
@@ -75,6 +78,7 @@ class GameViewController: UIViewController {
             let correct = phraseArray.contains(guess)
             
             if (correct) {
+                var winGame = true
                 correctLetters.append(guess)
                 correctTextDisplay = ""
                 for i in phraseArray.indices {
@@ -85,10 +89,17 @@ class GameViewController: UIViewController {
                             correctTextDisplay += String(phraseArray[i]).uppercaseString
                         } else {
                             correctTextDisplay += " _ "
+                            winGame = false
                         }
                     }
                 }
                 correctTextLabel.text = correctTextDisplay
+                if (winGame) { //Win Game Over - True
+                    let alert = UIAlertController(title: "You Win", message: "Feel free to play again.", preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated:true, completion: nil)
+                    guessButton.enabled = false
+                }
             } else {
                 incorrectLetters.append(guess)
                 incorrectLetters.append(" ")
@@ -99,7 +110,8 @@ class GameViewController: UIViewController {
                 }
                 else { //Lose Game Over - True
                     hangmanImage.image = UIImage(named: "hangman7.gif")
-                    let alert = UIAlertController(title: "You Lost", message: "You can try again if you want", preferredStyle: .Alert)
+                    let message = "The phrase was \" " + masterPhrase + "\""
+                    let alert = UIAlertController(title: "You Lost", message: message, preferredStyle: .Alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
                     self.presentViewController(alert, animated:true, completion: nil)
                     guessButton.enabled = false
@@ -108,6 +120,15 @@ class GameViewController: UIViewController {
                 
         }
         
+    }
+    @IBAction func startOverButtonPressed(sender: AnyObject) {
+        validInput = true
+        correctTextDisplay = ""
+        correctLetters = []
+        incorrectLetters = []
+        phraseArray = []
+        masterPhrase = ""
+        viewDidLoad()
     }
 
     override func didReceiveMemoryWarning() {
