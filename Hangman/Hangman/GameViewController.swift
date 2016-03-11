@@ -79,7 +79,9 @@ class GameViewController: UIViewController {
             
             if (correct) {
                 var winGame = true
-                correctLetters.append(guess)
+                if (!correctLetters.contains(guess)) {
+                    correctLetters.append(guess)
+                }
                 correctTextDisplay = ""
                 for i in phraseArray.indices {
                     if (phraseArray[i] == " ") {
@@ -101,16 +103,19 @@ class GameViewController: UIViewController {
                     guessButton.enabled = false
                 }
             } else {
-                incorrectLetters.append(guess)
-                incorrectLetters.append(" ")
+                if (!incorrectLetters.contains(guess)) {
+                    incorrectLetters.append(guess)
+                    incorrectLetters.append(" ")
+                }
                 incorrectTextView.text = "Incorrect Letters: \n" + String(incorrectLetters)
+                
                 
                 if ((incorrectLetters.count/2 + 1) < 7) { //Lose Game Over - False
                     hangmanImage.image = UIImage(named: "hangman" + "\(incorrectLetters.count/2 + 1)" + ".gif")
                 }
                 else { //Lose Game Over - True
                     hangmanImage.image = UIImage(named: "hangman7.gif")
-                    let message = "The phrase was \" " + masterPhrase + "\""
+                    let message = "The phrase was \"" + masterPhrase + "\""
                     let alert = UIAlertController(title: "You Lost", message: message, preferredStyle: .Alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
                     self.presentViewController(alert, animated:true, completion: nil)
@@ -126,6 +131,7 @@ class GameViewController: UIViewController {
         correctTextDisplay = ""
         correctLetters = []
         incorrectLetters = []
+        incorrectTextView.text = ""
         phraseArray = []
         masterPhrase = ""
         viewDidLoad()
