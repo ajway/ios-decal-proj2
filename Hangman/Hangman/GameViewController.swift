@@ -76,6 +76,7 @@ class GameViewController: UIViewController {
             let adjustedGuess = guessTextField.text?.uppercaseString
             let guess = Array(adjustedGuess!.characters)[0]
             let correct = phraseArray.contains(guess)
+            guessTextField.text = ""
             
             if (correct) {
                 var winGame = true
